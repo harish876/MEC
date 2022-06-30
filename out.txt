@@ -1,4 +1,0 @@
-Legumes;Preço;Qtde
-Batata;10.0;2
-Cenoura;9.0;10
-Tomate;8.0;7

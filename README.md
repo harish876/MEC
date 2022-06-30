@@ -1,9 +1,31 @@
-# Abstract
-This is a simulator for a Mobile Edge Computing (MEC) environment with IoT devices and interaction with the Cloud. It simulates the scheduling of tasks in a three layer architecture with IoT devices, or user devices, in the bottom layer, MEC servers close to the final user in the intermediate layer and Data Centers from the Cloud in the top layer. An application is chosen and it's parameters are configured in the simulation. The number of IoT devices and MEC servers are also defined. Then the application is deployed in all IoT devices and they create tasks for this application. Each task is scheduled according to the energy and time costs associated with all avaliable processing option in the system. The Cloud is assumed to have infinite resources, as it has it's elasticity characteristic, and is only used when the local resources (cores from IoT devices and from MEC servers) are saturated.
+# Title
+Time and Energy-Efficient task offloading and Scheduling Algorithm in a 3 tier Fog Architecture
 
-# 1 Introduction
+# About
 
-This project comprises of a simulator I developed for my **master's degree** at Federal University of Rio Grande do Sul (Portuguese: Universidade Federal do Rio Grande do Sul, UFRGS). It's main objective is to measure the total energy consumed and total elapsed time when processing tasks, from creation to conclusion, from a particular application. The built in scheduler calculates the costs associated to each resource allocation option in the architecture and selects the lowest one to execute the task. The same goes for all the application's tasks.
+Fog Computing paradigm is used to reduce the latency and computing cost of data produced by edge and IoT devices. The introduction of an intermediate fog layer between the device layer and the Cloud layer reduces cost and latency. This project involves simulating the fog layer and analysing the reduction in cost of system in terms of time and energy consumed.
+
+# Project Report
+
+More information please refer to the porject report attached and the Colab Notebook.
+
+# Introduction
+We propose a Time and energy efficient scheduler which allocates tasks from a particular
+application based on characteristics like the energy consumer, total time taken, nature of the task
+whether it is a critical or non critical task and its respective deadline. The task of finding minimal
+cost and optimization is a NP hard problem due to the following reasons:
+
+1. A single model cost and energy optimization problem is not a NP hard problem but
+modeling our cost based on just these 2 factors would not be sufficient. We need to take
+into consideration factors which contribute to time and energy like the energy consumed
+during data transmission, the energy consumed for data download, the time taken for data
+transfer and the objective of minimizing these variables for each individual layer i.e IOT,
+FOG and cloud layer. Thus this is a multi-objective optimization problem.
+
+2. We need data at a granular level and a method of calculating these parameters at each and
+every level. Only then a comprehensive analysis of the energy and time factor can be
+feasible for developing a real life solution. Thus we need a simulation procedure which
+provides us the tools to simulate and collect data at each and every step.
 
 ## 1.1 Processing sites
 There are three available resource allocation options in the system:
@@ -103,57 +125,19 @@ In this equation the allocation option that yields the lowest cost per task is c
 ![Systems cost](images/COSTsystem.PNG)
 
 
-# 4 The TEMS scheduling algorithm
-So we have the three layer architecture, the layers interaction with it's corresponding type of communication technology (5G and fiber optics) 
-
-![The TEMS scheduling algorithm](images/TEMSalgorithm.PNG)
-
-Initially the scheduler collects information about the CPU cores from IoT devices, MEC servers and Data Centers (frequency-voltage pairs for DVFS, chipset capacitance, the battery level of IoT devices and set of tasks). In step 2 first the critical tasks are allocated, because of the deadline constraint, and then the non-critical tasks. Both sets of tasks are allocated to the processing option that brings the lesser cost for the system. For the particular case of critical tasks, the selected processing option also needs processing time smaller than the deadline, so it may not have the minimum cost for the system, but the scheduler will choose the minimum cost that allows the task to be concluded before deadline.
-
-In step 3 tasks are monitored for conclusion. If a task finishes then the hardware used is made available for other tasks. Finally in step 4, the scheduler monitors the system for new tasks and updates the level of batteries for each IoT devices. If an IoT device reaches a inferior security limit of level battery, then allocation cannot occur in the IoT device anymore, because the scheduler will preserve the device to keep running (alive) and creating new tasks (application and users experience is maintained).
-
-# 5 Setting the project and running experiments
-The file you have to first look at is *SimulatorExecution.java*. There is the simulation's core, where are defined the characteristics of the applocations to be simulated, the number of created tasks in each simulation and number of IoT devices and MEC servers in the architecture.
-
-Also, you have to define the energy and time coefficents used in the task's cost equation for each policy (coefficientEnergy and coefficientTime variables) and alpha, beta and gamma, used in the cost minimation equation of each task. The code is already set with a basic configuration, your just have to worry if you want to alter values, otherwise the simulation is ready to execute.
-
-About some of the classes:
-
-* **RAN_5G.java**: You can set the latency of the connection and transfer rate. It is also possible to alter the power consumed during data transmisison. A basic setup is alredy configured.
-
-* **FiberOptics.java**: You can set the latency, power and transfer rate. A basic setup is alredy configured.
-
-* **IoTDevice.java**: In the constructor method you can set the capacitance of the IoT device chipset, the power consumed in idle, battery level, battery inferior safety limit, and the pairs with frequency and voltage for the CPU cores. These pairs, alongside with the capacitance, are used to calculate the dynamic power of the CPU cores. A basic setup is alredy configured.
-
-* **MECServer.java**: In the constructor method you can set the capacitance of the MEC server chipset, the power consumed in idle and the pairs with frequency and voltage for the CPU cores. These pairs, alongside with the capacitance, are used to calculate the dynamic power of the CPU cores. A basic setup is alredy configured.
-
-* **CloudDataCenter.java**: In the constructor method you can set the standard and turbo boost frequencies of the Cloud CPU cores. In methods *calculateDynamicEnergyStandardFreq()* and *calculateDynamicEnergyTurboFreq()* you can set the CPU core power associated to each frequency.
-
-* **Application.java, Scheduler.java and Task.java**: These classes have nothing to set. The characteristics associated to the application are set in *SimulatorExecution.java*.
-
-The project is ready to be executed. Just alter the specified values to get different results.
-
-# 6 Output files and data analysis
-The simulation has been designed to output files in a format that makes analysis easy. The files generated are .txt files with values separed by commas. The file *01-500-100-1-200000-LoadVariation.txt* is an exmaple of output file.
-
-To read this file you can use Microsoft Excel's import data from file feature. Just go the the **Data tab**, select option **Import data from text file** and choose the semicolon delimiter (';'). With that you can select data, plot graphs and analyse the simulation results. An example of spreadsheet is in *misc/dataImportedToExcel.xlsx*.
-
-![Data tab in Excel](images/excel-dataTab.png)
-
-# 7 More info
-If you want more detailed information about the cost model, simulator, experiments and results, please check the articles inside the **misc** folder of this project. We have four articles so far:
-
-* 2020-02-28 - Artigo ISCC 2020.pdf
-* 2020-06-10 - Artigo - ICSOC 2020.pdf
-* 2020-06-13 - Artigo SBCUP - Versão final.pdf
-* 2020-08-14 - Artigo - ICSOC 2020 (Short Paper).pdf
-
-## 7.1 Dependencies
+## 4 Dependencies
 This project uses javatuples-1.2.jar. This library is included in the "libraries" folder.
 
 # References:
-* Yu, H.; Wang, Q.; Guo, S. Energy-efficient task offloading and resource scheduling for mobile edge computing. In: 2018 IEEE International Conference on Networking, Architecture and Storage (NAS). [S.l.: s.n.], 2018. p. 1–4.
-* Tanenbaum, A. S.; Austin, T. Structured Computer Organization. 6th. ed. Prentice Hall, 2012. ISBN 0132916525,9780132916523. Available from Internet: <http://gen.lib.rus.ec/book/index.php?md5=f6fc02a547e862360e743754fc06375b>.
-* Burd, T.; Brodersen, R. Processor design for portable systems. Journal of VLSI Signal Processing, v. 13, 11 1996.
-* INTEL. Enhanced Intel SpeedStep Technology for the Intel Pentium M Processor (White Paper). [S.l.], 2004. Available from Internet: <https://web.archive.org/web/20150812030010/http://download.intel.com/design/network/papers/30117401.pdf>.
-* Sarangi, S. R.; Goel, S.; Singh, B. Energy efficient scheduling in iot networks. In: Proceedings of the 33rd Annual ACMSymposium on Applied Computing. New York, NY, USA: Association for Computing Machinery, 2018. (SAC ’18), p. 733–740. ISBN 9781450351911. Available from Internet: <https://doi.org/10.1145/3167132.3167213>.
+1. Yu, H.; Wang, Q.; Guo, S. Energy-efficient task offloading and resource scheduling for
+mobile edge computing. In: 2018 IEEE International Conference on Networking,
+Architecture and Storage (NAS). [S.l.: s.n.], 2018. p. 1–4.
+2. Offloading in Mobile Edge Computing: Task Allocation and Computational Frequency
+Scaling," by T. Q. Dinh, J. Tang, Q. D. La and T. Q. S. Quek. IEEE Transactions on
+Communications, vol. 65, no. 8, pp. 3571-3584, Aug. 2017.
+3. Guevara, Judy C., and Nelson L. S. da Fonseca. “Task Scheduling in Cloud-Fog
+Computing Systems.” Peer-To-Peer Networking and Applications, vol. 14, no. 2, Jan.
+2021, pp. 962–77, https://doi.org/10.1007/s12083-020-01051-9.Aazam, Mohammad, et
+al. “Offloading in Fog Computing for IoT: Review, Enabling Technologies, and Research
+Opportunities.” Future Generation Computer Systems, vol. 87, Oct. 2018, pp. 278–289,
+10.1016/j.future.2018.04.057. Accessed 8 Apr. 2020.
