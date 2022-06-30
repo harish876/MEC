@@ -7,7 +7,7 @@ Fog Computing paradigm is used to reduce the latency and computing cost of data 
 
 # Project Report
 
-More information please refer to the porject report attached and the Colab Notebook.
+More information please refer to the prject report attached and the Colab Notebook.
 
 # Introduction
 We propose a Time and energy efficient scheduler which allocates tasks from a particular
