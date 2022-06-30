@@ -5,10 +5,6 @@ Time and Energy-Efficient task offloading and Scheduling Algorithm in a 3 tier F
 
 Fog Computing paradigm is used to reduce the latency and computing cost of data produced by edge and IoT devices. The introduction of an intermediate fog layer between the device layer and the Cloud layer reduces cost and latency. This project involves simulating the fog layer and analysing the reduction in cost of system in terms of time and energy consumed.
 
-# Project Report
-
-More information please refer to the prject report attached and the Colab Notebook.
-
 # Introduction
 We propose a Time and energy efficient scheduler which allocates tasks from a particular
 application based on characteristics like the energy consumer, total time taken, nature of the task
@@ -26,6 +22,18 @@ FOG and cloud layer. Thus this is a multi-objective optimization problem.
 every level. Only then a comprehensive analysis of the energy and time factor can be
 feasible for developing a real life solution. Thus we need a simulation procedure which
 provides us the tools to simulate and collect data at each and every step.
+
+To Tackle the first problem, we develop a dynamic cost optimization model wherein there is a
+tradeoff between the energy consumed and the time taken for execution. This is done by
+calculating the cost as the weighted sum of the energy and time. This process is called Integer
+Linear Programming. We assign a weight of 0.8 to the energy parameter and a weight of 0.2 to
+our time parameter. Thus giving greater importance to energy consumed vs the time taken. The
+calculation of these costs however is done for each and every layer with considerations for the
+transmission cost, energy etc.
+
+# Project Report
+
+More information please refer to the prject report attached and the Colab Notebook.
 
 ## 1.1 Processing sites
 There are three available resource allocation options in the system:
